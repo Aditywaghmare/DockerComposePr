@@ -1,10 +1,41 @@
 services:
-  web:
-    image: aditya:latest
+  nginx:
+    image: nginx
+    container_name: rproxy
     ports:
-      - "9090:80"
+    - "80:80"
+    volumes:
+    - ./rproxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web1
+      - web2
+    restart: unless-stopped
+    networks:
+      - web-network
+
+  web1:
+    image: ubuntu/apache2
+    container_name: web1
+    ports:
+      - "80"
+    volumes:
+      - ./docker1:/var/www/html:ro
+    restart: unless-stopped
+    networks:
+      - web-network
+
 
   web2:
-    image: aditya2:latest
+    image: ubuntu/apache2
+    container_name: web2
     ports:
-      - "80:80"
+      - "80"
+    volumes:
+      - ./docker2:/var/www/html:ro
+    restart: unless-stopped
+    networks:
+      - web-network
+
+networks:
+  web-network:
+    driver: bridge
