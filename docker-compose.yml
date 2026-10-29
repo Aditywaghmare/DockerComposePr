@@ -2,7 +2,7 @@ services:
   web:
     image: aditya:latest
     ports:
-      - "8080:80"
+      - "9090:80"
 
   web2:
     image: aditya2:latest
